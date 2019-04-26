@@ -17,7 +17,7 @@ while getopts ":c:t" Option
 do
 	case $Option in
 		c)
-			myConfig="${OPTARG}"
+			myConfig="$(readlink -f "${OPTARG}")"
 			[ -r "${myConfig}" ] || {
 				echo "Cannot find config file at ${myConfig}, aborting">&2
 				exit 1
