@@ -19,7 +19,7 @@ git pull
 patch -i "${spec_patch_file}" -p1 ${spec_name}
 # rpmdev-bumpspec produces 'Release: X%{?dist}.Y' instead of 'Release: X.Y%{?dist}
 # TODO: report a bug to rpmdevtools upstream
-perl -api -e 'next unless $F[0] eq "Release:"; $F[1] =~ /(\d+)(.\d+)?(%.*)?/; $rel = $2 // 0; $rel =~ s/\.//; $F[1] = $1 . "." . ++$rel . $3; $_ = join(" ", @F)' ${spec_name}
+perl -api -e 'next unless $F[0] eq "Release:"; $F[1] =~ /(\d+(?:\.\d+)?)(%.*)?/; $F[1] = ($1 + .1) . $2; $_ = join(" ", @F)' ${spec_name}
 # Cannot just use spectool until
 # https://bugzilla.redhat.com/show_bug.cgi?id=1711953 is fixed
 rpmspec -P ${spec_name} | spectool -g -
