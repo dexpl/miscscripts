@@ -10,7 +10,7 @@ pkg_name=ansible
 spec_name=${pkg_name}.spec
 local_mirror_base="${HOME}/projects/fedpkg_fedora_pkgs"
 local_mirror_path="${local_mirror_base}/${pkg_name}"
-spec_patch_file="$(rpm --eval '%{specdir}')/${spec_name}.hostname_f.patch"
+spec_patch_file="$(rpm --eval '%{_specdir}')/${spec_name}.hostname_f.patch"
 copr_repo=misc
 
 # TODO: run `fedpkg clone` unless ${local_mirror_path} exists
