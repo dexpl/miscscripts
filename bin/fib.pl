@@ -1,11 +1,10 @@
-#!/usr/bin/perl -l
+#!/usr/bin/perl -w
 
 use strict;
 
 sub fib {
-	my $i = int shift;
-	return ($i >= 2 ? fib($i - 1) + fib($i - 2) : $i)
+    my $i = int( shift // 0 );
+    $i >= 2 ? fib( $i - 1 ) + fib( $i - 2 ) : $i;
 }
 
-my $upto = (@ARGV ? int shift : 0);
-map { printf "fib(%2d) = %10d\n", $_, fib($_) } (0..$upto);
+printf "fib(%2d) = %10d$/", $_, fib($_) foreach ( 0 .. int( shift // 0 ) )
