@@ -10,3 +10,4 @@ getvpngateconfs.sh	Fetches openvpn configs from vpngate.net for given country in
 gtk3-set-theme	View/set/list avail. GTK3 themes
 powerstatus.sh	Dummy ACPI power status (on line/on battery) monitor
 vpngate.sh	Pre-configures openvpn-client@vpngate.service with what's fetched by getvpngateconfs.sh. See also systemd/system/openvpn-client@vpngate.service.d/override.conf
+primes.pl	First (20 by default) prime number searcher. Just a programming excercise
