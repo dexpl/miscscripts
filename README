@@ -1,6 +1,6 @@
 Miscellaneous scripts:
 
-acrofind	www.acronymfinder.net CLI client
+acrofind	http://acronyms.silmaril.ie CLI client
 cue2flacs	Splits flac+cue (wav+cue, iso+cue, etc.) on flac tracks
 dwhois.awk	Dummy whois client on awk
 fbbackup	Firebird database backup
