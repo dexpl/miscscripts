@@ -1,14 +1,18 @@
 Miscellaneous scripts:
 
-acrofind	http://acronyms.silmaril.ie CLI client
-cue2flacs	Splits flac+cue (wav+cue, iso+cue, etc.) on flac tracks
-dwhois.awk	Dummy whois client on awk
-fbbackup	Firebird database backup
+acrofind	http://acronyms.silmaril.ie CLI client.
+cue2flacs	Splits flac+cue (wav+cue, iso+cue, etc.) into flac tracks.
+dwhois.awk	Dummy whois client in awk.
+fbbackup	Firebird database backup.
+freshcureit	Fresh DrWeb CureIt .iso downloader.
+getvpngateconfs.sh	Fetches openvpn configs from vpngate.net for given country into given directory.
+gtk3-set-theme	View/set/list avail. GTK3 themes.
+lextract	Extracts links from a given URL.
+powerstatus.sh	Dummy ACPI power status (on line/on battery) monitor.
+vpngate.sh	Pre-configures openvpn-client@vpngate.service with what's fetched by getvpngateconfs.sh. See also systemd/system/openvpn-client@vpngate.service.d/override.conf.
+
+pl-exercises: some exercises written in Perl just to keep in practice; nothing much special (and maybe sometimes broken) though.
 fib.pl	Fibonacci calculator. Due to its intended inoptimality it's actually a CPU stress-tester.
-freshcureit	Fresh DrWeb CureIt .iso downloader
-getvpngateconfs.sh	Fetches openvpn configs from vpngate.net for given country into given directory
-gtk3-set-theme	View/set/list avail. GTK3 themes
-powerstatus.sh	Dummy ACPI power status (on line/on battery) monitor
-vpngate.sh	Pre-configures openvpn-client@vpngate.service with what's fetched by getvpngateconfs.sh. See also systemd/system/openvpn-client@vpngate.service.d/override.conf
-lextract	Extracts links from a given URL
-primes.pl	First (20 by default) prime number searcher. Just a programming excercise
+is_leap.pl	Whether given years are leap?
+primes.pl	First (20 by default) prime number searcher.
+stats.pl	Statictics exercise. TBD actually.
