@@ -12,7 +12,8 @@ $url = uf_uristr $url;
 $pat //= '.';
 $pat = qr/$pat/;
 print @$_[0] foreach grep {
-    URI->new_abs( @$_[0], $url ) =~ /$pat/;
+	@$_[0] = URI->new_abs( @$_[0], $url );
+	@$_[0] =~ /$pat/;
 } @{ HTML::TreeBuilder->new_from_url($url)->extract_links('a') };
 
 __END__
