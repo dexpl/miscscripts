@@ -11,9 +11,8 @@ die "Missing URL$/" unless $url;
 $url = uf_uristr $url;
 $pat //= '.';
 $pat = qr/$pat/;
-$,   = "\n";
-print grep {
-    ($_ = URI->new_abs( @$_[0], $url )) =~ /$pat/;
+print @$_[0] foreach grep {
+    URI->new_abs( @$_[0], $url ) =~ /$pat/;
 } @{ HTML::TreeBuilder->new_from_url($url)->extract_links('a') };
 
 __END__
