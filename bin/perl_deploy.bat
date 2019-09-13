@@ -14,4 +14,4 @@ if "!perlurl!"=="" (
 )
 
 echo on
-start "" /w msiexec /i !perlurl! /log "%userprofile%\%~n0.log" /passive /norestart
+start "" /w msiexec /i %perlurl% /log "%userprofile%\%~n0.log" /passive /norestart
