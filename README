@@ -10,6 +10,7 @@ gtk3-set-theme	View/set/list avail. GTK3 themes.
 lextract	Extracts links from a given URL.
 perl_deploy.bat	Install Strawberry Perl on Windows.
 powerstatus.sh	Dummy ACPI power status (on line/on battery) monitor.
+ssldates.sh Display SSL certificate validity dates for a given server.
 vpngate.sh	Pre-configures openvpn-client@vpngate.service with what's fetched by getvpngateconfs.sh. See also systemd/system/openvpn-client@vpngate.service.d/override.conf.
 
 pl-exercises: some exercises written in Perl just to keep in practice; nothing much special (and maybe sometimes broken) though.
