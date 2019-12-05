@@ -1,5 +1,6 @@
 Miscellaneous scripts:
 
+99-dnsmasq	Start or stop dnsmasq when a given network interface gets up or down.
 acrofind	http://acronyms.silmaril.ie CLI client.
 cue2flacs	Splits flac+cue (wav+cue, iso+cue, etc.) into flac tracks.
 dwhois.awk	Dummy whois client in awk.

@@ -1,0 +1,21 @@
+#!/usr/bin/perl
+
+# Put this into dispatcher.d
+
+use strict;
+use warnings;
+
+my $con_name  = 'br1';
+my $unit_name = 'dnsmasq.service';
+
+my %event = ( 'up', 'start', 'down', 'stop' );
+
+exit unless $ENV{'CONNECTION_ID'} eq $con_name;
+
+my ($if_name, $action) = @ARGV;
+
+for ( keys %event ) {
+print STDERR $_, $/;
+    next unless $action eq $_;
+    `systemctl $event{$_} $unit_name`;
+}
