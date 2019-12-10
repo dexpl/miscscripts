@@ -69,13 +69,14 @@ sub adduser {
 }
 
 my $src_file = shift // '-';
-my $dst_file = shift // $src_file;
+my $dst_file = shift // '-';
 $src_file = *STDIN  if $src_file eq '-';
 $dst_file = *STDOUT if $dst_file eq '-';
-unless ( -w $dst_file ) {
-    print STDERR "File $dst_file is not writable, writing to STDOUT";
-    $dst_file = *STDOUT;
-}
+# TODO rework reliably
+#unless ( -w $dst_file ) {
+#    print STDERR "File $dst_file is not writable, writing to STDOUT";
+#    $dst_file = *STDOUT;
+#}
 
 my $csv = csv(
     auto_diag => 1,
