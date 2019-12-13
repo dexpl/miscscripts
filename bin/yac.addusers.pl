@@ -16,7 +16,7 @@ use Text::CSV 2.00 qw( csv );
 
 my @in_headers_req = qw(last  first);
 my @in_headers     = ( @in_headers_req, qw(  middle) );
-my @out_headers    = ( @in_headers, qw( nickname password response) );
+my @out_headers    = ( @in_headers, qw( response nickname password ) );
 
 my $base_url = "https://api.directory.yandex.net/v6";
 my $ua       = LWP::UserAgent->new();
@@ -29,6 +29,9 @@ use constant TRANSLIT_SCHEME => "ALA-LC RUS";
 my $tr = new Lingua::Translit(TRANSLIT_SCHEME);
 
 my $DEBUG = $ENV{'YAC_DEBUG'} // 0;
+
+# TODO do it sane way
+my $DOMAIN = $ENV{'YAC_DOMAIN'} // '';
 
 sub mknickname {
     my ( $first, $last, $middle ) = @_;
@@ -112,5 +115,6 @@ csv(
             $_{$key} = $_{'name'}{$key};
             delete $_{'name'}{$key};
         }
+        $_{'nickname'} = sprintf '%s@%s', $_{'nickname'}, $DOMAIN if $DOMAIN;
     },
 );
