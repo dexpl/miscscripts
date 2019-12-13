@@ -8,10 +8,11 @@ use File::Which;
 use HTTP::Request;
 use JSON;
 use Lingua::Translit;
+use Lingua::Translit::Tables 0.28;
 use LWP::UserAgent;
 use String::Random;
 use Term::ANSIColor qw(:constants);
-use Text::CSV qw( csv );
+use Text::CSV 2.00 qw( csv );
 
 my @in_headers_req = qw(last  first);
 my @in_headers     = ( @in_headers_req, qw(  middle) );
@@ -21,7 +22,9 @@ my $base_url = "https://api.directory.yandex.net/v6";
 my $ua       = LWP::UserAgent->new();
 
 # see Lingua::Translit::Tables
-use constant TRANSLIT_SCHEME => "BGN/PCGN RUS Standard";
+# I hate Debian!
+#use constant TRANSLIT_SCHEME => "BGN/PCGN RUS Standard";
+use constant TRANSLIT_SCHEME => "ALA-LC RUS";
 
 my $tr = new Lingua::Translit(TRANSLIT_SCHEME);
 
