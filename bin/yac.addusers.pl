@@ -22,9 +22,7 @@ my $base_url = "https://api.directory.yandex.net/v6";
 my $ua       = LWP::UserAgent->new();
 
 # see Lingua::Translit::Tables
-# I hate Debian!
-#use constant TRANSLIT_SCHEME => "BGN/PCGN RUS Standard";
-use constant TRANSLIT_SCHEME => "ALA-LC RUS";
+use constant TRANSLIT_SCHEME => "BGN/PCGN RUS Standard";
 
 my $tr = new Lingua::Translit(TRANSLIT_SCHEME);
 
@@ -41,6 +39,7 @@ sub mknickname {
           . ".$last" );
     $nickname = $tr->translit($nickname);
     $nickname =~ tr,',i,;
+		print STDERR ON_RED, $nickname, RESET;
     return $nickname;
 }
 
@@ -97,7 +96,7 @@ $dst_file = *STDOUT if $dst_file eq '-';
 my $csv = csv(
     auto_diag => 1,
     encoding  => 'utf8',
-    filter    => 'not_blank',
+    filter    => 'filled',
     headers   => [@in_headers],
     in        => $src_file,
     on_in     => \&adduser,
