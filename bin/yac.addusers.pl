@@ -22,8 +22,7 @@ my $base_url = "https://api.directory.yandex.net/v6";
 my $ua       = LWP::UserAgent->new();
 
 # see Lingua::Translit::Tables
-use constant TRANSLIT_SCHEME => "BGN/PCGN RUS Standard";
-#use constant TRANSLIT_SCHEME => "ALA-LC RUS";
+use constant TRANSLIT_SCHEME => 'BGN/PCGN RUS Standard';
 
 my $tr = new Lingua::Translit(TRANSLIT_SCHEME);
 
@@ -39,8 +38,7 @@ sub mknickname {
           . ( ($middle) ? '.' . substr( $middle, 0, 1 ) : '' )
           . ".$last" );
     $nickname = $tr->translit($nickname);
-    $nickname =~ tr,',i,;
-		print STDERR ON_RED, $nickname, RESET;
+    $nickname =~ tr,'ë,io,;
     return $nickname;
 }
 
