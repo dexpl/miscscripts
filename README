@@ -13,6 +13,8 @@ perl_deploy.bat	Install Strawberry Perl on Windows.
 powerstatus.sh	Dummy ACPI power status (on line/on battery) monitor.
 ssldates.sh Display SSL certificate validity dates for a given server.
 vpngate.sh	Pre-configures openvpn-client@vpngate.service with what's fetched by getvpngateconfs.sh. See also systemd/system/openvpn-client@vpngate.service.d/override.conf.
+winrm_setup.bat	Set up WinRM
+xx2en.bat	Rename (some of) built-in Windown users/groups locale-independently
 
 pl-exercises: some exercises written in Perl just to keep in practice; nothing much special (and maybe sometimes broken) though.
 fib.pl	Fibonacci calculator. Due to its intended inoptimality it's actually a CPU stress-tester.
