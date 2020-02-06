@@ -12,10 +12,10 @@ my %event = ( 'up', 'start', 'down', 'stop' );
 
 exit unless $ENV{'CONNECTION_ID'} eq $con_name;
 
-my ($if_name, $action) = @ARGV;
+my ( $if_name, $action ) = @ARGV;
 
 for ( keys %event ) {
-print STDERR $_, $/;
+    print STDERR $_, $/;
     next unless $action eq $_;
     `systemctl $event{$_} $unit_name`;
 }
