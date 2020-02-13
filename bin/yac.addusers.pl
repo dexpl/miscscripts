@@ -37,8 +37,13 @@ sub mknickname {
             substr( $first, 0, 1 )
           . ( ($middle) ? '.' . substr( $middle, 0, 1 ) : '' )
           . ".$last" );
+
+# TODO: add ICAO to Lingua::Translit::Tables (see https://en.wikipedia.org/wiki/Romanization_of_Russian#Transliteration_of_the_names_in_Russian_passports)
+    $nickname =~ s,ь,,g;
+    $nickname =~ s,ъ,ie,g;
+    print STDERR RED, $nickname, RESET if $DEBUG >= 10;
     $nickname = $tr->translit($nickname);
-    $nickname =~ tr,'ë,io,;
+    $nickname =~ tr,ë,o,;
     return $nickname;
 }
 
