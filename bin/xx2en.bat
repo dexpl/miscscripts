@@ -9,8 +9,8 @@
 wmic exit || exit /b 1
 
 :: users
-wmic useraccount where 'sid like "S-1-5-21-%-500"' call rename admin
-wmic useraccount where 'sid like "S-1-5-21-%-501"' call rename guest
+wmic useraccount where 'sid like "S-1-5-21-%%-500"' call rename admin
+wmic useraccount where 'sid like "S-1-5-21-%%-501"' call rename guest
 
 :: groups
 wmic group where sid="S-1-5-32-544" call rename admins
