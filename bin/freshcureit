@@ -1,14 +1,21 @@
 #!/bin/bash
 
-wget=/usr/bin/wget
 livecdUrl=https://download.geo.drweb.com/pub/drweb/livedisk/drweb-livedisk-900-cd.iso
-outputDir=/srv/distr/os/livespecial/cureit
-curdate=$(date +%F.%s)
+outputDir=${FC_OUTPUT_DIR:-/srv/distr/os/livespecial/cureit}
+[ -d "${outputDir}" ] || mkdir -pv "${outputDir}" || {
+	tmpDir=$(mktemp -d)
+	echo Cannot write into ${outputDir}, writing into ${tmpDir} instead>&2
+	outputDir=${tmpDir}
+	unset tmpDir
+}
+curdate=$(date +%F)
 isoname="${outputDir}/cureit.${curdate}.iso"
 logfile="${outputDir}/cureit.${curdate}.log"
-wgetopts="-o '${logfile}' -O '${isoname}' ${livecdUrl} -t0"
+wgetopts="-a ${logfile} -c -O ${isoname} ${livecdUrl} --show-progress -t 0"
 
-[ -d "${outputDir}" ] || mkdir -pv "${outputDir}" || exit 1
-${wget} ${wgetopts}
-ln -f "${isoname}" "${outputDir}/cureit-latest.iso"
-find "${outputDir}" -mindepth 1 -ctime +6 -type f -delete
+wget ${wgetopts} || {
+	echo Cannot retrieve ${livecdUrl}, breaking>&2
+	exit $?
+}
+ln -frs "${isoname}" "${outputDir}/cureit-latest.iso"
+find "${outputDir}" -mindepth 1 -ctime +6 '(' -name 'cureit.*.iso' -o -name 'cureit.*.log' ')' -type f -delete
