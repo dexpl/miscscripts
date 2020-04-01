@@ -11,8 +11,7 @@ gtk3-set-theme	View/set/list available GTK3 themes.
 lextract	Extracts links from a given URL.
 perl_deploy.bat	Install Strawberry Perl on Windows.
 powerstatus.sh	Dummy ACPI power status (on line/on battery) monitor.
-ssldates.sh	Display a given server SSL certificate validity dates.
-ssltext.sh	Display a given server SSL certificate in a text form.
+ssl*.sh	Display various bits of info about an SSL certificate of a given server (and optional port): ssl.sh just verifies a certificate chain.
 termservice.bat	Enable Terminal Server on a Windows host.
 vpngate.sh	Pre-configures openvpn-client@vpngate.service with what's fetched by getvpngateconfs.sh. See also systemd/system/openvpn-client@vpngate.service.d/override.conf.
 winrm_setup.bat	Set up WinRM on a Windows host.
