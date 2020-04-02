@@ -20,7 +20,7 @@ xx2en.bat	Rename (some of) built-in Windown users/groups locale-independently.
 pl-exercises: some exercises written in Perl just to keep in practice; nothing much special (and maybe sometimes broken) though.
 fib.pl	Fibonacci calculator. Due to its intended inoptimality it's actually a CPU stress-tester.
 is_leap.pl	Whether given years are leap?
-primes.pl	First (20 by default) prime number searcher.
+primes.pl	First N (20 by default) prime number searcher.
 stats.pl	Statictics exercise. TBD actually.
 
 # vi:ts=20:noet
