@@ -11,6 +11,7 @@ use lib "$FindBin::Bin";    # TODO remove this from release!
 use Encode qw/encode decode/;
 use Encode::IMAPUTF7;
 use Net::IMAP::Client;
+use Time::Piece;
 
 $\ = "\n";
 $, = ' ';
@@ -34,11 +35,9 @@ my %sconf = (
 
 my $archive_prefix = 'Архив';
 
-# TODO 'before' => '1-${curMonth - 1}-${curYear}'
-my $general_search_criteria = 'ALL';
-$general_search_criteria = { 'before' => '1-Jun-2017' };
-$general_search_criteria = { 'before' => '3-May-2017' };
-#$general_search_criteria = 'ALL';
+my $today = localtime;
+my $general_search_criteria =
+  { 'before' => "1-" . $today->monname . "-" . $today->year };
 
 {
     # https://stackoverflow.com/a/2037520
@@ -47,34 +46,53 @@ $general_search_criteria = { 'before' => '3-May-2017' };
 }
 
 my $user = shift;
-die "No user name given${\}" unless $user;
-die "No config found for ${user}${\}" unless $sconf{$user};
+die "No user name given" . $\ unless $user;
+die "No config found for ${user}" . $\ unless $sconf{$user};
 
-my %conf = %{ $sconf{$user} };
 my $imap = Net::IMAP::Client->new(
-    %conf,
+    %{ $sconf{$user} },
     user            => $user,
     ssl_verify_peer => 0
-) or die "Cannot connect to IMAP server${\}";
+) or die "Cannot connect to IMAP server" . $\;
 
-#print foreach @{$imap->capability};
-$imap->login or die "Login failed: @{[$imap->last_error]}${\}";
-print decode 'IMAP-UTF-7', $_ foreach @{ $imap->folders };
-print $imap->separator;
-print 'Got SORT' if $imap->capability(qr/sort/i);
-my $folder = @ARGV ? join $imap->separator, @ARGV : 'INBOX';
-$folder = @ARGV ? join $imap->separator, @ARGV : $imap->separator;
-my $iu7folder = encode 'IMAP-UTF-7', $folder;
-print $folder;
+$imap->login or die "Login failed: @{[$imap->last_error]}" . $\;
 
-if ( $imap->examine($iu7folder) ) {
-    print Dumper $imap->{FOLDERS}{$iu7folder};
+my %folders = map { decode( 'IMAP-UTF-7', $_ ) => $_ } $imap->folders;
+
+my $folder     = @ARGV ? join $imap->separator, @ARGV : 'INBOX';
+my $iu7_folder = encode 'IMAP-UTF-7', $folder;
+
+if ( $imap->examine($iu7_folder) ) {
     if ( my $msg_ids = $imap->search($general_search_criteria) ) {
-        my @msg_ids = @$msg_ids;
-        print scalar @msg_ids;
-				print Dumper $imap->get_summaries($msg_ids);
+        my %to_archive;
+        foreach ( @{ $imap->get_summaries( $msg_ids, 'from' ) } ) {
+            my $msg_date =
+              Time::Piece->strptime( ( split( ' ', $_->internaldate ) )[0],
+                '%d-%b-%Y' );
+            my $archive_path =
+              $archive_prefix
+              . $msg_date->strftime(
+                $imap->separator . "%Y" . $imap->separator . "%m" );
+            push @{ $to_archive{$archive_path} }, $_->uid;
+        }
+        foreach ( keys %to_archive ) {
+            my $iu7_archive_folder = $folders{$_};
+            unless ($iu7_archive_folder) {
+                $iu7_archive_folder = encode 'IMAP-UTF-7', $_;
+                unless ( $imap->create_folder($iu7_archive_folder) ) {
+                    print STDERR $imap->last_error;
+                    next;
+                }
+            }
+            if ( $imap->copy( $to_archive{$_}, $iu7_archive_folder ) ) {
+                $imap->add_flags( $to_archive{$_}, '\\Deleted' ) or print STDERR $imap->last_error;
+            } else {
+                print STDERR $imap->last_error;
+            }
+        }
+        $imap->expunge;
     }
 } else {
     print STDERR $imap->last_error;
 }
-$imap->logout or die "Logout failed: @{[$imap->last_error]}${\}";
+$imap->logout or die "Logout failed: @{[$imap->last_error]}" . $\;
