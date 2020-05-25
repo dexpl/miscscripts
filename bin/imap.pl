@@ -6,38 +6,29 @@ use warnings;
 use utf8;
 
 use Data::Dumper;
-use FindBin;
-use lib "$FindBin::Bin";    # TODO remove this from release!
 use Encode qw/encode decode/;
 use Encode::IMAPUTF7;
 use Net::IMAP::Client;
+use Net::Netrc;
 use Time::Piece;
+use Time::Seconds;
 
 $\ = "\n";
 $, = ' ';
 my %sconf = (
     'dexpl@ya.ru' => {
-        server => 'imap.yandex.com',
-        pass   => 'nofate_yandex',
-        ssl    => 1,
-    },
-    'iamdexpl@gmail.com' => {
-        server => 'imap.googlemail.com',
-        pass   => 'nofate google',
-        ssl    => 1,
+        server          => 'imap.yandex.com',
+        ssl             => 1,
+        ssl_verify_peer => 0,
     },
     'beru@shiptor.ru' => {
-        server => 'imap.yandex.com',
-        pass   => 'smack6avenue7Sign',
-        ssl    => 1,
+        server          => 'imap.yandex.com',
+        ssl             => 1,
+        ssl_verify_peer => 0,
     },
 );
 
 my $archive_prefix = 'Архив';
-
-my $today = localtime;
-my $general_search_criteria =
-  { 'before' => "1-" . $today->monname . "-" . $today->year };
 
 {
     # https://stackoverflow.com/a/2037520
@@ -48,38 +39,56 @@ my $general_search_criteria =
 my $user = shift;
 die "No user name given" . $\ unless $user;
 die "No config found for ${user}" . $\ unless $sconf{$user};
+my $mach = Net::Netrc->lookup( $sconf{$user}->{server}, $user );
+die "No password found for ${user}" . $\ unless $mach;
+my $pass = $mach->password;
+
+#my $today = localtime;
+#my $general_search_criteria =
+#  { 'before' => "1-" . $today->monname . "-" . $today->year };
+my $baseday                 = localtime() - 1 * ONE_DAY;
+my $general_search_criteria = {
+    'before' => join '-',
+    ( $baseday->mday, $baseday->monname, $baseday->year )
+};
+print STDERR Dumper $general_search_criteria;
 
 my $imap = Net::IMAP::Client->new(
     %{ $sconf{$user} },
-    user            => $user,
-    ssl_verify_peer => 0
+    user => $user,
+		pass => $pass,
 ) or die "Cannot connect to IMAP server" . $\;
 
 $imap->login or die "Login failed: @{[$imap->last_error]}" . $\;
 
-my %folders = map { decode( 'IMAP-UTF-7', $_ ) => $_ } $imap->folders;
+my %folders =
+  map { print STDERR $_; decode( 'IMAP-UTF-7', $_ ) => $_ } $imap->folders;
 
 my $folder     = @ARGV ? join $imap->separator, @ARGV : 'INBOX';
 my $iu7_folder = encode 'IMAP-UTF-7', $folder;
 
-if ( $imap->examine($iu7_folder) ) {
+if ( $imap->select($iu7_folder) ) {
     if ( my $msg_ids = $imap->search($general_search_criteria) ) {
         my %to_archive;
-        foreach ( @{ $imap->get_summaries( $msg_ids, 'from' ) } ) {
+        foreach ( @{ $imap->get_summaries( $msg_ids, 'from' ) // [] } ) {
             my $msg_date =
-              Time::Piece->strptime( ( split( ' ', $_->internaldate ) )[0],
+              Time::Piece->strptime( ( split ' ', $_->internaldate )[0],
                 '%d-%b-%Y' );
-            my $archive_path =
-              $archive_prefix
-              . $msg_date->strftime(
-                $imap->separator . "%Y" . $imap->separator . "%m" );
+            my $archive_path = $archive_prefix
+              . $msg_date->strftime( join $imap->separator,
+                ( '', "%Y", "%m", "%d" ) );
+            print STDERR $archive_path;
             push @{ $to_archive{$archive_path} }, $_->uid;
+            local $, = ' ';
+            print( $_->uid, $_->internaldate );
         }
         foreach ( keys %to_archive ) {
             my $iu7_archive_folder = $folders{$_};
             unless ($iu7_archive_folder) {
                 $iu7_archive_folder = encode 'IMAP-UTF-7', $_;
-                unless ( $imap->create_folder($iu7_archive_folder) ) {
+                if ( $imap->create_folder($iu7_archive_folder) ) {
+                    $folders{$_} = $iu7_archive_folder;
+                } else {
                     print STDERR $imap->last_error;
                     next;
                 }
