@@ -5,7 +5,6 @@ use strict;
 use warnings;
 use utf8;
 
-use Data::Dumper;
 use Encode qw/encode decode/;
 use Encode::IMAPUTF7;
 use Net::IMAP::Client;
@@ -14,7 +13,6 @@ use Time::Piece;
 use Time::Seconds;
 
 $\ = "\n";
-$, = ' ';
 my %sconf = (
     'dexpl@ya.ru' => {
         server          => 'imap.yandex.com',
@@ -43,26 +41,23 @@ my $mach = Net::Netrc->lookup( $sconf{$user}->{server}, $user );
 die "No password found for ${user}" . $\ unless $mach;
 my $pass = $mach->password;
 
-#my $today = localtime;
-#my $general_search_criteria =
-#  { 'before' => "1-" . $today->monname . "-" . $today->year };
 my $baseday                 = localtime() - 1 * ONE_DAY;
 my $general_search_criteria = {
     'before' => join '-',
     ( $baseday->mday, $baseday->monname, $baseday->year )
 };
-print STDERR Dumper $general_search_criteria;
 
 my $imap = Net::IMAP::Client->new(
     %{ $sconf{$user} },
     user => $user,
-		pass => $pass,
+    pass => $pass,
 ) or die "Cannot connect to IMAP server" . $\;
 
 $imap->login or die "Login failed: @{[$imap->last_error]}" . $\;
 
 my %folders =
-  map { print STDERR $_; decode( 'IMAP-UTF-7', $_ ) => $_ } $imap->folders;
+  map { decode( 'IMAP-UTF-7', $_ ) => $_ } $imap->folders;
+print STDERR $_ foreach sort keys %folders;
 
 my $folder     = @ARGV ? join $imap->separator, @ARGV : 'INBOX';
 my $iu7_folder = encode 'IMAP-UTF-7', $folder;
@@ -94,7 +89,8 @@ if ( $imap->select($iu7_folder) ) {
                 }
             }
             if ( $imap->copy( $to_archive{$_}, $iu7_archive_folder ) ) {
-                $imap->add_flags( $to_archive{$_}, '\\Deleted' ) or print STDERR $imap->last_error;
+                $imap->add_flags( $to_archive{$_}, '\\Deleted' )
+                  or print STDERR $imap->last_error;
             } else {
                 print STDERR $imap->last_error;
             }
