@@ -7,8 +7,7 @@ sub divisible {
 
 sub is_leap {
     my $year = shift;
-    return divisible( $year, 400 ) if divisible( $year, 100 );
-    divisible( $year, 4 );
+    divisible( $year, 100 ) ? divisible( $year, 400 ) : divisible( $year, 4 );
 }
 
 @years = @ARGV ? @ARGV : ( 1900 + (localtime)[5] );
