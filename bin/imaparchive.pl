@@ -12,7 +12,6 @@ use Net::Netrc;
 use Time::Piece;
 use Time::Seconds;
 
-$\ = "\n";
 my %sconf = (
     'dexpl@ya.ru' => {
         server          => 'imap.yandex.com',
@@ -35,10 +34,10 @@ my $archive_prefix = 'Архив';
 }
 
 my $user = shift;
-die "No user name given" . $\ unless $user;
-die "No config found for ${user}" . $\ unless $sconf{$user};
+die "No user name given$/" unless $user;
+die "No config found for ${user}$/" unless $sconf{$user};
 my $mach = Net::Netrc->lookup( $sconf{$user}->{server}, $user );
-die "No password found for ${user}" . $\ unless $mach;
+die "No password found for ${user}$/" unless $mach;
 my $pass = $mach->password;
 
 my $baseday                 = localtime() - 1 * ONE_DAY;
@@ -51,9 +50,9 @@ my $imap = Net::IMAP::Client->new(
     %{ $sconf{$user} },
     user => $user,
     pass => $pass,
-) or die "Cannot connect to IMAP server" . $\;
+) or die "Cannot connect to IMAP server$/";
 
-$imap->login or die "Login failed: @{[$imap->last_error]}" . $\;
+$imap->login or die "Login failed: @{[$imap->last_error]}$/";
 
 my %folders =
   map { decode( 'IMAP-UTF-7', $_ ) => $_ } $imap->folders;
@@ -100,4 +99,4 @@ if ( $imap->select($iu7_folder) ) {
 } else {
     print STDERR $imap->last_error;
 }
-$imap->logout or die "Logout failed: @{[$imap->last_error]}" . $\;
+$imap->logout or die "Logout failed: @{[$imap->last_error]}$/";
