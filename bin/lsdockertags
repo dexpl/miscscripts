@@ -5,7 +5,7 @@ _skopeo () {
   local image=${1}
   [ "${image%%/*}" = "${image}" ] && image="docker.io/${image}"
   [ "${image^^*://}" = "${image}" ] && image="docker://${image}"
-  skopeo list-tags ${image} | ${jq} .Tags[]
+  skopeo list-tags "${image}" | ${jq} .Tags[]
 }
 
 # TODO support an arbitrary docker registry
@@ -15,4 +15,4 @@ _generic () {
 
 image="${1:?}"
 jq='jq --raw-output'
-{ [ $(type -p skopeo) ] && _skopeo "${image}" || _generic "${image}"; } | sort --numeric-sort | ${PAGER:-cat}
+{ [ "$(type -p skopeo)" ] && _skopeo "${image}" || _generic "${image}"; } | sort --numeric-sort | ${PAGER:-cat}
