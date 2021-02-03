@@ -9,6 +9,7 @@ freshcureit	Fresh DrWeb CureIt .iso downloader.
 getvpngateconfs.sh	Fetches openvpn configs from vpngate.net for given country into given directory.
 gtk3-set-theme	View/set/list available GTK3 themes.
 lextract.pl	Extracts links from a given URL.
+lsdockertags	List tags for given docker image.
 mcsi.sh	No description given.
 perl_deploy.bat	Install Strawberry Perl on Windows.
 powerstatus.sh	Dummy ACPI power status (on line/on battery) monitor.

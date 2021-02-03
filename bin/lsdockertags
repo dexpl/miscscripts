@@ -1,0 +1,6 @@
+#!/bin/bash
+# List tags for given docker image
+# TODO support an arbitrary docker registry
+
+image="${1:?}"
+curl --location --silent https://registry.hub.docker.com/v1/repositories/${image}/tags | jq -r .[].name | sort -n | ${PAGER:-cat}
