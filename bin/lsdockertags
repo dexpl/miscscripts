@@ -1,6 +1,18 @@
 #!/bin/bash
 # List tags for given docker image
+
+_skopeo () {
+  local image=${1}
+  [ "${image%%/*}" = "${image}" ] && image="docker.io/${image}"
+  [ "${image^^*://}" = "${image}" ] && image="docker://${image}"
+  skopeo list-tags ${image} | ${jq} .Tags[]
+}
+
 # TODO support an arbitrary docker registry
+_generic () {
+  curl --location --silent "https://registry.hub.docker.com/v1/repositories/${1}/tags" | ${jq} .[].name
+}
 
 image="${1:?}"
-curl --location --silent https://registry.hub.docker.com/v1/repositories/${image}/tags | jq --raw-output .[].name | sort --numeric-sort | ${PAGER:-cat}
+jq='jq --raw-output'
+{ [ $(type -p skopeo) ] && _skopeo "${image}" || _generic "${image}"; } | sort --numeric-sort | ${PAGER:-cat}
