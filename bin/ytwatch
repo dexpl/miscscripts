@@ -5,10 +5,10 @@
 mplayes_opts="-really-quiet"
 mplayer="mplayer ${mplayes_opts}"
 
-urls=$@
+urls=("$@")
 # TODO try to HEAD selections (both primary and clipboard) and skip non-urls
-[ -z "${urls}" ] && urls="$(xclip -o)"
-[ -z "${urls}" ] && urls="$(xclip -o -selection clipboard)"
+[ ${#urls[*]} ] || urls=("$(xclip -o)")
+[ ${#urls[*]} ] || urls=("$(xclip -o -selection clipboard)")
 
 trap _trap_handler INT TERM EXIT
 
@@ -37,6 +37,6 @@ play_pause() {
 playlistdir=$(mktemp -d)
 
 pushd "${playlistdir}" || exit $?
-youtube-dl --output '%(id)s.%(ext)s' ${urls}
+youtube-dl --output '%(id)s.%(ext)s' "${urls[@]}"
 find . -type f | grep -q ^ || exit
 play_pause 0 && ${mplayer} -- * && play_pause 1
