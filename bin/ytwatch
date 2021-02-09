@@ -7,8 +7,8 @@ mplayer="mplayer ${mplayes_opts}"
 
 urls=("$@")
 # TODO try to HEAD selections (both primary and clipboard) and skip non-urls
-[ ${#urls[*]} ] || urls=("$(xclip -o)")
-[ ${#urls[*]} ] || urls=("$(xclip -o -selection clipboard)")
+[ ${#urls[*]} -eq 0 ] && urls=("$(xclip -o)")
+[ ${#urls[*]} -eq 0 ] && urls=("$(xclip -o -selection clipboard)")
 
 trap _trap_handler INT TERM EXIT
 
