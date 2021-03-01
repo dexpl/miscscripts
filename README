@@ -1,7 +1,7 @@
 Miscellaneous scripts:
 
 99-dnsmasq	Start or stop dnsmasq when a given network interface gets up or down.
-acrofind	http://acronyms.silmaril.ie CLI client.
+acrofind.pl	http://acronyms.silmaril.ie CLI client.
 cue2flacs	Splits flac+cue (wav+cue, iso+cue, etc.) into flac tracks.
 dwhois.awk	Dummy whois client in awk.
 fbbackup	Firebird database backup.
@@ -10,6 +10,7 @@ getvpngateconfs.sh	Fetches openvpn configs from vpngate.net for given country in
 gtk3-set-theme	View/set/list available GTK3 themes.
 lextract.pl	Extracts links from a given URL.
 lsdockertags	List tags for given docker image.
+macvendors.sh	Look up a vendor of a given MAC address via macvendors.com
 mcsi.sh	No description given.
 perl_deploy.bat	Install Strawberry Perl on Windows.
 powerstatus.sh	Dummy ACPI power status (on line/on battery) monitor.
