@@ -32,6 +32,6 @@ for dest in ${*}
 do
 	# TODO somewhat improve error accumulation algorythm
 	rsync ${rsync_opts} ${src} ${dest} || ERROR=$((10 * cnt++ + $? + ERROR))
-	shift 
+	shift
 done
 exit ${ERROR}
