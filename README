@@ -13,6 +13,7 @@ lextract.pl	Extracts links from a given URL.
 lsdockertags	List tags for given docker image.
 macvendors.sh	Look up a vendor of a given MAC address via macvendors.com
 mcsi.sh	No description given.
+mkcnt.sh	Make (locally run) a Docker container from a given image
 perl_deploy.bat	Install Strawberry Perl on Windows.
 powerstatus.sh	Dummy ACPI power status (on line/on battery) monitor.
 ssl*.sh	Display various bits of info about an SSL certificate of a given server (and optional port): ssl.sh just verifies a certificate chain.
