@@ -37,6 +37,6 @@ play_pause() {
 playlistdir=$(mktemp -d)
 
 pushd "${playlistdir}" || exit $?
-youtube-dl --output '%(id)s.%(ext)s' -- "${urls[@]}"
+youtube-dl ${YTDL_OPTS} --output '%(id)s.%(ext)s' -- "${urls[@]}"
 find . -type f | grep -q ^ || exit
 play_pause 0 && ${mplayer} -- * && play_pause 1
