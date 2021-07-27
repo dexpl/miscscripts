@@ -2,14 +2,15 @@ Miscellaneous scripts:
 
 99-dnsmasq	Start or stop dnsmasq when a given network interface gets up or down.
 acrofind.pl	http://acronyms.silmaril.ie CLI client.
-cue2flacs	Splits flac+cue (wav+cue, iso+cue, etc.) into flac tracks.
+cue2flacs	Split flac+cue (wav+cue, iso+cue, etc.) into flac tracks.
 dwhois.awk	Dummy whois client in awk.
 fbbackup	Firebird database backup.
 freshcureit	Fresh DrWeb CureIt .iso downloader.
 ga-cmd.pl	Not-too-complex wrapper around virsh QEMU guest agent command execution.
-getvpngateconfs.sh	Fetches openvpn configs from vpngate.net for given country into given directory.
+getvpngateconfs.sh	Fetch openvpn configs from vpngate.net for given country into given directory.
 gtk3-set-theme	View/set/list available GTK3 themes.
-lextract.pl	Extracts links from a given URL.
+lextract.pl	Extract links from a given URL.
+lsdhcpservers.pl	List DHCP server(s) from which NICs are configured. Uses nmcli(1).
 lsdockertags	List tags for given docker image.
 macvendors.sh	Look up a vendor of a given MAC address via macvendors.com
 mcsi.sh	No description given.
@@ -18,7 +19,7 @@ perl_deploy.bat	Install Strawberry Perl on Windows.
 powerstatus.sh	Dummy ACPI power status (on line/on battery) monitor.
 ssl*.sh	Display various bits of info about an SSL certificate of a given server (and optional port): ssl.sh just verifies a certificate chain.
 termservice.bat	Enable Terminal Server on a Windows host.
-vpngate.sh	Pre-configures openvpn-client@vpngate.service with what's fetched by getvpngateconfs.sh. See also systemd/system/openvpn-client@vpngate.service.d/override.conf.
+vpngate.sh	Pre-configure openvpn-client@vpngate.service with what's fetched by getvpngateconfs.sh. See also systemd/system/openvpn-client@vpngate.service.d/override.conf.
 winrm_setup.bat	Set up WinRM on a Windows host.
 xx2en.bat	Rename (some of) built-in Windown users/groups locale-independently.
 
@@ -29,4 +30,3 @@ primes.pl	First N (20 by default) prime number searcher.
 stats.pl	Statictics exercise. TBD actually.
 
 # vi:ts=20:noet
-Your branch is up to date with 'origin/master'.
