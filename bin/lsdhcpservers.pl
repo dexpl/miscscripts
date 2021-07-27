@@ -5,12 +5,18 @@ use warnings;
 use feature qw(say);
 
 $, = shift // ': ';
-my ($ifname, %dhcp);
-foreach my $con (`nmcli -g NAME connection show --active`) {
-    foreach (`nmcli -f GENERAL,DHCP4 connection show $con`) {
-        my @data   = split;
-        $ifname = $data[-1] if $data[0] eq qw(GENERAL.NAME:);
-        $dhcp{$ifname} = $data[-1] if $data[1] eq qw(dhcp_server_identifier);
+my ( $ifname, %dhcp );
+# TODO use `nmcli -g all device show` since this won't work on CentOS 7
+foreach (`nmcli -g UUID connection show --active`) {
+    foreach (`nmcli -g GENERAL.DEVICES,DHCP4 connection show uuid $_`) {
+        chomp;
+        if (s,^DHCP4:,,) {
+            $dhcp{$ifname} = (
+                split / = /, ( grep { /dhcp_server_identifier/ } split / \| / )[0]
+            )[-1];
+        } else {
+            $ifname = $_;
+        }
     }
 }
 say $_, $dhcp{$_} foreach sort keys %dhcp;
