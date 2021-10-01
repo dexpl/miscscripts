@@ -10,6 +10,10 @@
 
 set -e
 
+punycode() {
+	[ "$(type -p idn)" ] && idn "${1}" || echo "${1}"
+}
+
 action=$(basename $0 .sh)
 action=${action##ssl}
 [ -n "${action}" ] && action=-${action}
@@ -28,11 +32,11 @@ elif [ $# -eq 1 ]; then
 			proto=${urlsplit[0]:0:-1}
 			connect_to=${urlsplit[2]}
 		else
-			connect_to=${1}
+			connect_to=$(punycode ${1})
 		fi
 	fi
 elif [ $# -eq 2 ]; then
-	connect_to=${1}:${2}
+	connect_to=$(punycode ${1}):${2}
 else
 	echo "Incorrect command line arguments: '$@', giving up">&2
 	exit 2
