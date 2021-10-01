@@ -14,6 +14,21 @@ punycode() {
 	[ "$(type -p idn)" ] && idn "${1}" || echo "${1}"
 }
 
+service2port() {
+	if [[ "${1}" =~ ^[[:digit:]][[:digit:]]+$ ]]; then
+		echo ${1}
+	else
+		read -r -a service < <(getent services "${1}")
+		echo ${service[-1]%%/*}
+	fi
+}
+
+# split host:port on host and port
+# assign'em to hostsplit array
+splithost() {
+	IFS=: read -r -a hostsplit <<< "${1}"
+}
+
 action=$(basename $0 .sh)
 action=${action##ssl}
 [ -n "${action}" ] && action=-${action}
@@ -30,20 +45,20 @@ elif [ $# -eq 1 ]; then
 		if [[ "${1}" == *'://'* ]]; then
 			IFS=/ read -r -a urlsplit <<< "${1%%\?*}"
 			proto=${urlsplit[0]:0:-1}
-			connect_to=${urlsplit[2]}
+			splithost ${urlsplit[2]}
 		else
-			connect_to=$(punycode ${1})
+			splithost ${1}
 		fi
+		connect_to=$(punycode ${hostsplit[0]}):$(service2port ${hostsplit[1]:-${proto:-443}})
 	fi
 elif [ $# -eq 2 ]; then
-	connect_to=$(punycode ${1}):${2}
+	connect_to=$(punycode ${1}):$(service2port ${2})
 else
 	echo "Incorrect command line arguments: '$@', giving up">&2
 	exit 2
 fi
 
 if [ -n "${connect_to}" ]; then
-	[[ "${connect_to}" == *':'* ]] || connect_to=${connect_to}:${proto:-443}
 	< /dev/null openssl s_client -connect ${connect_to} | ${action}
 else
 	echo "Nothing to do; try running `bash -x $0 $@` to see what's wrong">&2
