@@ -10,6 +10,7 @@ ga-cmd.pl	Not-too-complex wrapper around virsh QEMU guest agent command executio
 getvpngateconfs.sh	Fetch openvpn configs from vpngate.net for given country into given directory.
 gtk3-set-theme	View/set/list available GTK3 themes.
 lextract.pl	Extract links from a given URL.
+lextract.py	Remake of lextract.pl on Python. Works under both py2 and py3. Depends on std. lib. only.
 lsdhcpservers.pl	List DHCP server(s) from which NICs are configured. Uses nmcli(1).
 lsdockertags	List tags for given docker image.
 macvendors.sh	Look up a vendor of a given MAC address via macvendors.com
