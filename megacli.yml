@@ -1,0 +1,108 @@
+# vi:ft=yaml.ansible
+---
+- hosts: all
+  vars:
+    got_root: '{{ ansible_effective_user_id == 0 }}'
+    megacli_url: https://hwraid.le-vert.net/debian
+    megacli_key: '{{ megacli_url }}/hwraid.le-vert.net.gpg.key'
+    megacli_zip: https://docs.broadcom.com/docs-and-downloads/raid-controllers/raid-controllers-common-files/8-07-14_MegaCLI.zip
+    storcli_url: https://docs.broadcom.com/docs-and-downloads/raid-controllers/raid-controllers-common-files/007.1613.0000.0000_Unified_StorCLI.zip
+    perccli_url: https://dl.dell.com/FOLDER06507823M/1/PERCCLI_D6YWP_7.1327.00_A09_Linux.tar.gz
+    tmpdir: '{{ ansible_env["TEMP"] | default(ansible_env["TMP"]) | default("/tmp") }}'
+  tasks:
+    - block:
+      - name: Add https apt transport
+        apt:
+          name: apt-transport-https
+      - name: Add MegaCLI apt repo key
+        apt_key:
+          url: '{{ megacli_key }}'
+      - name: Add MegaCLI apt repo
+        apt_repository:
+          repo: 'deb {{ megacli_url }} {{ ansible_distribution_release }} main'
+      - name: Install MegaCLI
+        package:
+          name: megacli
+      become: '{{ not got_root }}'
+      when: ansible_pkg_mgr == 'apt'
+    - block:
+      - name: Install unzip
+        package:
+          name: unzip
+        become: '{{ not got_root }}'
+      - name: Unzip MegaCLI distribution
+        unarchive:
+          src: '{{ megacli_zip }}'
+          dest: '{{ tmpdir }}'
+          list_files: yes
+          remote_src: yes
+        register: megacli
+      - name: Install MegaCLI RPM(s)
+        package:
+          name: "{{ megacli.files | select('match', '^.*\\.rpm$') | map('regex_replace', '^', tmpdir + '/') | list }}"
+          disable_gpg_check: yes
+        become: '{{ not got_root }}'
+      when: ansible_pkg_mgr == 'dnf' or ansible_pkg_mgr == 'yum'
+      tags:
+        - megacli
+    # TODO support non-x86 Linux, VMWare, Windows, etc
+    - block:
+      - name: Install unzip
+        package:
+          name: unzip
+        become: '{{ not got_root }}'
+      - name: Unzip StorCLI distribution
+        unarchive:
+          src: '{{ storcli_url }}'
+          dest: '{{ tmpdir }}'
+          list_files: yes
+          remote_src: yes
+        register: storcli
+      - block:
+        - block:
+          - name: Install StorCLI key
+            apt_key:
+              file: "{{ item }}"
+            loop: "{{ storcli.files | select('match', '.*\\.asc$') | map('regex_replace', '^', tmpdir + '/') | list }}"
+          - name: Install StorCLI package(s)
+            apt:
+              deb: "{{ item }}"
+            loop: "{{ storcli.files | select('match', '.*/Ubuntu/.*\\.deb$') | map('regex_replace', '^', tmpdir + '/') | list }}"
+          when: ansible_pkg_mgr == 'apt'
+        - block:
+#          - name: Install StorCLI key (useless for rpm)
+#            rpm_key:
+#              key: "{{ item }}"
+#            loop: "{{ storcli.files | select('match', '.*\\.asc$') | map('regex_replace', '^', tmpdir + '/') | list }}"
+          - name: Install StorCLI package(s)
+            yum:
+              name: "{{ storcli.files | select('match', '.*/Linux/.*\\.noarch\\.rpm$') | map('regex_replace', '^', tmpdir + '/') | list }}"
+              disable_gpg_check: yes
+          when: ansible_pkg_mgr == 'dnf' or ansible_pkg_mgr == 'yum'
+        become: '{{ not got_root }}'
+      tags:
+        - storcli
+    # TODO support non-x86 Linux, VMWare, Windows, etc
+    - block:
+      - name: Install unzip
+        package:
+          name: unzip
+        become: '{{ not got_root }}'
+      - name: Unzip PercCLI distribution
+        unarchive:
+          src: '{{ perccli_url }}'
+          dest: '{{ tmpdir }}'
+          list_files: yes
+          remote_src: yes
+        register: perccli
+      - name: Install PercCLI
+        apt:
+          deb: '{{ item }}'
+        loop: "{{ perccli.files | select('match', '.*\\.deb$') | map('regex_replace', '^', tmpdir + '/') | list }}"
+        when: ansible_pkg_mgr == 'apt'
+      - name: Install PercCLI
+        yum:
+          name: "{{ perccli.files | select('match', '.*\\.rpm$') | map('regex_replace', '^', tmpdir + '/') | list }}"
+        when: ansible_pkg_mgr == 'dnf' or ansible_pkg_mgr == 'yum'
+      tags:
+        - perccli

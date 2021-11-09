@@ -30,4 +30,5 @@ is_leap.pl	Whether given years are leap?
 primes.pl	First N (20 by default) prime number searcher.
 stats.pl	Statictics exercise. TBD actually.
 
+megacli.yml	Ansible playbook for MegaCLI, StorCLI and PercCLI deployment on Debian- or RedHat-based GNU/Linux distros.
 # vi:ts=20:noet
