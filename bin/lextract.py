@@ -5,18 +5,17 @@ import re
 
 try:
     from html.parser import HTMLParser
-except ImportError:
-    from HTMLParser import HTMLParser
-
-try:
+    import urllib.parse as rp
     import urllib.request as rq
 except ImportError:
+    from HTMLParser import HTMLParser
+    import urlparse as rp
     import urllib as rq
 
 class LinkScrape(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
-        [print(re.sub(r_what, r_with, link)) for link in [v if v.find('http') == 0 else baseurl + v for k, v in attrs if k == 'href' if tag == 'a'] if re.search(regex, link)]
+        [print(re.sub(r_what, r_with, link)) for link in [rp.urljoin(baseurl, v) for k, v in attrs if k == 'href' if tag == 'a'] if re.search(regex, link)]
 
 if __name__ == '__main__':
     try:
@@ -31,4 +30,4 @@ if __name__ == '__main__':
         LinkScrape().feed(rq.urlopen(url).read().decode('utf-8'))
     except IndexError:
         # TODO read stdin
-        print('Usage: %s URL [regex]' % sys.argv[0], file=sys.stderr)
+        print('Usage: %s URL [regex] [replace_what] [replace_with]' % sys.argv[0], file=sys.stderr)
