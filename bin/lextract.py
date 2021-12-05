@@ -31,3 +31,4 @@ if __name__ == '__main__':
     except IndexError:
         # TODO read stdin
         print('Usage: %s URL [regex] [replace_what] [replace_with]' % sys.argv[0], file=sys.stderr)
+        sys.exit(1)
