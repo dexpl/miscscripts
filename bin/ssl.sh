@@ -12,15 +12,6 @@ punycode() {
 	[ "$(type -p idn)" ] && idn "${1}" || echo "${1}"
 }
 
-service2port() {
-	if [[ "${1}" =~ ^[[:digit:]][[:digit:]]+$ ]]; then
-		echo ${1}
-	else
-		read -r -a service < <(getent services "${1}")
-		echo ${service[-1]%%/*}
-	fi
-}
-
 # split host:port on host and port
 # assign'em to hostsplit array
 splithost() {
@@ -53,10 +44,10 @@ elif [ $# -eq 1 ]; then
 		else
 			splithost ${1}
 		fi
-		connect $(punycode ${hostsplit[0]}):$(service2port ${hostsplit[1]:-${proto:-443}})
+		connect $(punycode ${hostsplit[0]}):${hostsplit[1]:-${proto:-443}}
 	fi
 elif [ $# -eq 2 ]; then
-	connect $(punycode ${1}):$(service2port ${2})
+	connect $(punycode ${1}):${2}
 else
 	echo "Incorrect command line arguments: '$@', giving up">&2
 	exit 2
