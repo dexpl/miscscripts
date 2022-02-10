@@ -15,7 +15,7 @@ except ImportError:
 class LinkScrape(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
-        [print(re.sub(r_what, r_with, link)) for link in [up.urljoin(baseurl, v) for k, v in attrs if k == 'href' if tag == 'a'] if re.search(regex, link)]
+        [print(re.sub(r_what, r_with, link)) for link in [up.urljoin(url, v) for k, v in attrs if k == 'href' if tag == 'a'] if re.search(regex, link)]
 
 if __name__ == '__main__':
     try:
@@ -26,7 +26,7 @@ if __name__ == '__main__':
             r_with = sys.argv[4]
         except IndexError:
             r_what = r_with = ''
-        baseurl = up.urljoin(url, '..')
+        # TODO don't assume utf-8
         LinkScrape().feed(ureq.urlopen(url).read().decode('utf-8'))
     except IndexError:
         # TODO read stdin
