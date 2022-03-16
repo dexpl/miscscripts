@@ -7,7 +7,6 @@ dwhois.awk	Dummy whois client in awk.
 fbbackup	Firebird database backup.
 freshcureit	Fresh DrWeb CureIt .iso downloader.
 ga-cmd.pl	Not-too-complex wrapper around virsh QEMU guest agent command execution.
-getvpngateconfs.sh	Fetch openvpn configs from vpngate.net for given country into given directory.
 gtk3-set-theme	View/set/list available GTK3 themes.
 lextract.pl	Extract links from a given URL.
 lextract.py	Remake of lextract.pl on Python. Works under both py2 and py3. Depends on std. lib. only.
@@ -20,7 +19,6 @@ perl_deploy.bat	Install Strawberry Perl on Windows.
 powerstatus.sh	Dummy ACPI power status (on line/on battery) monitor.
 ssl*.sh	Display various bits of info about an SSL certificate of a given server (and optional port): ssl.sh just verifies a certificate chain.
 termservice.bat	Enable Terminal Server on a Windows host.
-vpngate.sh	Pre-configure openvpn-client@vpngate.service with what's fetched by getvpngateconfs.sh. See also systemd/system/openvpn-client@vpngate.service.d/override.conf.
 winrm_setup.bat	Set up WinRM on a Windows host.
 xx2en.bat	Rename (some of) built-in Windown users/groups locale-independently.
 
