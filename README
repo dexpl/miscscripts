@@ -15,12 +15,8 @@ lsdockertags	List tags for given docker image.
 macvendors.sh	Look up a vendor of a given MAC address via macvendors.com
 mcsi.sh	No description given.
 mkcnt.sh	Make (locally run) a Docker container from a given image
-perl_deploy.bat	Install Strawberry Perl on Windows.
 powerstatus.sh	Dummy ACPI power status (on line/on battery) monitor.
 ssl*.sh	Display various bits of info about an SSL certificate of a given server (and optional port): ssl.sh just verifies a certificate chain.
-termservice.bat	Enable Terminal Server on a Windows host.
-winrm_setup.bat	Set up WinRM on a Windows host.
-xx2en.bat	Rename (some of) built-in Windown users/groups locale-independently.
 
 pl-exercises: some exercises written in Perl just to keep in practice; nothing much special (and maybe sometimes broken) though.
 fib.pl	Fibonacci calculator. Due to its intended inoptimality it's actually a CPU stress-tester.
