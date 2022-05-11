@@ -4,17 +4,21 @@ use strict;
 
 use HTML::TreeBuilder;
 use URI;
+use URI::Escape qw(uri_unescape);
 use URI::Heuristic qw(uf_uristr);
 
+my %uris;
 my ( $url, $pat ) = @ARGV;
 die "Missing URL$/" unless $url;
 $url = uf_uristr $url;
 $pat //= '.';
 $pat = qr/$pat/;
-print @$_[0] foreach grep {
+$uris{uri_unescape(@$_[0])}++ foreach grep {
     @$_[0] = URI->new_abs( @$_[0], $url );
     @$_[0] =~ /$pat/;
 } @{ HTML::TreeBuilder->new_from_url($url)->extract_links('a') };
+
+print foreach sort keys %uris;
 
 __END__
 
