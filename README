@@ -2,6 +2,7 @@ Miscellaneous scripts:
 
 99-dnsmasq	Start or stop dnsmasq when a given network interface gets up or down.
 acrofind.pl	http://acronyms.silmaril.ie CLI client.
+cbr.sh	Избранные курсы валют Центробанка РФ.
 cue2flacs	Split flac+cue (wav+cue, iso+cue, etc.) into flac tracks.
 dwhois.awk	Dummy whois client in awk.
 fbbackup	Firebird database backup.
