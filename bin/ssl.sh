@@ -26,7 +26,7 @@ connect() {
 
 action=$(basename $0 .sh)
 action=${action##ssl}
-[ -n "${action}" ] && action=-${action}
+[ -n "${action}" ] && action="-${action} -nameopt utf8"
 action="openssl x509 -noout ${action}"
 if [ $# -eq 0 ]; then
 	${action}
