@@ -21,20 +21,25 @@ splithost() {
 # connect to given host:port
 connect() {
 	set -e
-	< /dev/null openssl s_client -connect ${1} | ${action}
+	< /dev/null ${openssl} s_client -connect ${1} | ${action}
 }
 
+openssl=${OPENSSL_BIN:-openssl}
 action=$(basename $0 .sh)
 action=${action##ssl}
 [ -n "${action}" ] && action="-${action} -nameopt utf8"
-action="openssl x509 -noout ${action}"
+action="${openssl} x509 -noout ${action}"
 if [ $# -eq 0 ]; then
 	${action}
 	exit $?
 elif [ $# -eq 1 ]; then
 	cert_name=${1}
 	if [ -e "${cert_name}" ]; then
-		${action} -in "${cert_name}"
+    if [ "$(env LC_MESSAGES=C file -b "${cert_name}")" == 'PEM certificate' ]; then
+      ${action} -in "${cert_name}"
+    else
+      ${action} -in ${cert_name} -inform DER
+    fi
 		exit $?
 	else
 		if [[ "${1}" == *'://'* ]]; then
