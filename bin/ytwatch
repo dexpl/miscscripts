@@ -1,6 +1,13 @@
 #!/bin/bash
 
 [ -n "${YTWATCH_DEBUG}" ] && set -x
+[ -z "${YTDL_BIN}" ] && {
+	for ytdl_bin in yt-dlp youtube-dl
+	do
+		YTDL_BIN=$(command -v ${ytdl_bin})
+		[ -n "${YTDL_BIN}" ] && break
+	done
+}
 
 mplayes_opts="-really-quiet"
 mplayer="mplayer ${mplayes_opts}"
@@ -37,6 +44,6 @@ play_pause() {
 playlistdir=$(mktemp -d)
 
 pushd "${playlistdir}" || exit $?
-youtube-dl ${YTDL_OPTS} --output '%(id)s.%(ext)s' -- "${urls[@]}"
+${YTDL_BIN} ${YTDL_OPTS} --output '%(id)s.%(ext)s' -- "${urls[@]}"
 find . -type f | grep -q ^ || exit
 play_pause 0 && ${mplayer} -- * && play_pause 1
