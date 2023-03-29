@@ -16,8 +16,7 @@ foreach (@ARGV) {
     my $xml = get("$url$_");
     die "Error while talking to acronym server$/" unless defined $xml;
     my $xpath   = XML::XPath->new( xml => $xml );
-    my $found_n = $xpath->findvalue($found);
-    if ($found_n) {
+    if ($xpath->findvalue($found)) {
         print "$_ is";
         foreach ( $xpath->findnodes($acro) ) {
             my $node = $_;
