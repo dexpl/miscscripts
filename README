@@ -2,15 +2,17 @@ Miscellaneous scripts:
 
 99-dnsmasq	Start or stop dnsmasq when a given network interface gets up or down.
 acrofind.pl	http://acronyms.silmaril.ie CLI client.
+acrofind.sh	The same as acrofind.pl in bash with xmlstarlet (the latter does all the job).
 cbr.sh	Избранные курсы валют Центробанка РФ.
 cue2flacs	Split flac+cue (wav+cue, iso+cue, etc.) into flac tracks.
+dumpio2files.pl	A quick and extremely dirty hack to split Apache error_log produced by mod_dumpio into files.
 dwhois.awk	Dummy whois client in awk.
 fbbackup	Firebird database backup.
 freshcureit	Fresh DrWeb CureIt .iso downloader.
 ga-cmd.pl	Not-too-complex wrapper around virsh QEMU guest agent command execution.
 gtk3-set-theme	View/set/list available GTK3 themes.
 lextract.pl	Extract links from a given URL.
-lextract.py	Remake of lextract.pl on Python. Works under both py2 and py3. Depends on std. lib. only.
+lextract.py	Remake of lextract.pl in Python. Works under both py2 and py3. Depends on std. lib. only.
 lsdhcpservers.pl	List DHCP server(s) from which NICs are configured. Uses nmcli(1).
 lsdockertags	List tags for given docker image.
 macvendors.sh	Look up a vendor of a given MAC address via macvendors.com
