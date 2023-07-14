@@ -33,7 +33,9 @@ my %outfiles;
 while (<>) {
     # Example:
     # [Wed Feb 08 11:52:04.169518 2023] [dumpio:trace7] [pid 25540] mod_dumpio.c(103): [client 172.18.0.3:34264] mod_dumpio:  dumpio_in (data-HEAP): POST /cardio/hs/integration/cardio/micard HTTP/1.1\r\n
-    next unless /\[pid (\d+)\] .* \[client ([\d\.]+):(\d+)\] mod_dumpio:\s+dumpio_(\S+) \(data-HEAP\):\s+(.*)/;
+    # Another example:
+    # [Tue Mar 28 17:51:22.645563 2023] [dumpio:trace7] [pid 2448:tid 140229608371968] mod_dumpio.c(103): [client 188.170.189.153:62933] mod_dumpio:  dumpio_in (data-HEAP): \r\n
+    next unless /\[pid (\d+)(?::tid \d+)*\] .* \[client ([\d\.]+):(\d+)\] mod_dumpio:\s+dumpio_(\S+) \(data-HEAP\):\s+(.*)/;
     my ($pid, $clientip, $clientport, $direction, $data) = ($1, $2, $3, $4, $5);
     next if $data =~ / bytes$/;
     my $datadir = "${basedir}/${pid}/${clientip}.${clientport}";
