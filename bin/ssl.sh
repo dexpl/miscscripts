@@ -21,7 +21,7 @@ splithost() {
 # connect to given host:port
 connect() {
 	set -e
-	< /dev/null ${openssl} s_client -connect ${1} | ${action}
+	< /dev/null ${openssl} s_client -connect ${1}:${2} -servername ${1} -showcerts | ${action}
 }
 
 openssl=${OPENSSL_BIN:-openssl}
@@ -53,7 +53,7 @@ elif [ $# -eq 1 ]; then
 		else
 			splithost ${1}
 		fi
-		connect $(punycode ${hostsplit[0]}):${hostsplit[1]:-${proto:-443}}
+		connect $(punycode ${hostsplit[0]}) ${hostsplit[1]:-${proto:-443}}
 	fi
 elif [ $# -eq 2 ]; then
 	connect $(punycode ${1}):${2}
